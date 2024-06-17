@@ -1,0 +1,48 @@
+C51 COMPILER V9.60.7.0   TEST_SSEC                                                         06/17/2024 15:34:43 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TEST_SSEC
+OBJECT MODULE PLACED IN test_ssec.OBJ
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE test_ssec.c LARGE OPTIMIZE(0,SPEED) BROWSE INCDIR(..\timestamp) DEBUG OB
+                    -JECTEXTEND PRINT(.\Out\test_ssec.lst) TABS(2)
+
+line level    source
+
+   1          #include "stdafx.h"
+*** WARNING C322 IN LINE 9 OF stdafx.h: unknown identifier
+   2          #include <stdio.h>
+   3          #include "timestamp_ssec.h"
+*** ERROR C141 IN LINE 7 OF timestamp_ssec.h: syntax error near 'long', expected 'hdata'
+*** ERROR C129 IN LINE 21 OF timestamp_ssec.h: missing ';' before 'leapyear_check'
+   4          
+   5          int main()
+   6          {
+   7              uint64_t unixtimestamp = 0;
+   8          
+   9              scanf("%lld", &unixtimestamp);
+  10          
+  11              time_struct tt_in;
+  12          
+  13              tt_in = stamptotime(unixtimestamp);
+  14              printf("%02d%02d-%02d-%02d %02d:%02d:%02d:%03d\n",
+  15                     tt_in.h_year, tt_in.l_year, tt_in.mon, tt_in.day, tt_in.hour, tt_in.min, tt_in.sec, tt_in.ssec)
+             -;
+  16          
+  17              // time_struct t_out = {20, 24, 6, 14, 12, 0, 0, 64}; // 219950899264
+  18              // time_struct t_out = {19, 70, 1, 1, 0, 0, 1, 64}; // Jun 14 2024 12:00:00:064
+  19              // time_struct t_out = {19, 70, 12, 11, 0, 0, 1, 1}; // 3804364929
+  20              // time_struct t_out = {19, 70, 2, 1, 0, 0, 0, 1}; // Jun 14 2024 12:00:00:064
+  21              // time_struct t_out = {19, 70, 11, 1, 0, 0, 1, 64}; // Jun 14 2024 12:00:00:064
+  22              // time_struct t_out = {19, 70, 1, 1, 0, 0, 1, 64}; // Jun 14 2024 12:00:00:064
+  23              // time_struct t_out = {19, 70, 1, 1, 0, 0, 1, 64}; // Jun 14 2024 12:00:00:064
+  24              // time_struct t_out = {19, 70, 1, 1, 0, 0, 1, 64}; // Jun 14 2024 12:00:00:064
+  25              // time_struct t_out = {20, 00, 6, 14, 12, 0, 0, 64}; // Jun 14 2024 12:00:00:064
+  26              time_struct t_out = {21, 00, 12, 14, 12, 0, 0, 64}; // 528956006464
+  27          
+  28              uint64_t stamp = timetostamp(t_out);
+  29              printf("Unix timestamp: %llu\n", stamp);
+  30          
+  31              return 0;
+  32          }
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  2 ERROR(S)

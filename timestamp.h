@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 typedef signed char int8_t;      /**<  8bit integer type */
 typedef signed short int16_t;    /**< 16bit integer type */
 typedef signed int int32_t;      /**< 32bit integer type */
@@ -50,13 +52,13 @@ time_struct stamptotime(uint32_t stamp)
     mon_add = 0;
     day_temp = t_out.day;
 
-    for (int i = t_out.mon - 1;; i++)
+    for (uint32_t i = t_out.mon - 1;; i++)
     {
-        size_t a = i % 12;
+        uint8_t a = i % 12;
 
         year_temp = t_out.h_year * 100 + t_out.l_year + (i / 12);
 
-        size_t temp = (a == 1 && leapyear_check(year_temp)) ? (month_buf[a] + 1) : month_buf[a];
+        uint32_t temp = (a == 1 && leapyear_check(year_temp)) ? (month_buf[a] + 1) : month_buf[a];
 
         /* If we update the month, initial the day to the '1' */
         if (mon_add)

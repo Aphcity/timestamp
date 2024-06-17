@@ -1,0 +1,71 @@
+C51 COMPILER V9.60.7.0   TEST                                                              06/17/2024 15:34:42 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TEST
+OBJECT MODULE PLACED IN test.OBJ
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE test.c LARGE OPTIMIZE(0,SPEED) BROWSE INCDIR(..\timestamp) DEBUG OBJECTE
+                    -XTEND PRINT(.\Out\test.lst) TABS(2)
+
+line level    source
+
+   1          //#include "stdafx.h"
+   2          #include <stdio.h>
+   3          #include "timestamp.h"
+*** WARNING C318 IN LINE 1 OF timestamp.h: can't open file 'stdint.h'
+*** ERROR C141 IN LINE 55 OF timestamp.h: syntax error near 'uint32_t', expected 'sizeof'
+*** ERROR C202 IN LINE 55 OF timestamp.h: 'i': undefined identifier
+*** ERROR C202 IN LINE 55 OF timestamp.h: 'i': undefined identifier
+*** ERROR C141 IN LINE 55 OF timestamp.h: syntax error near ')', expected ';'
+*** ERROR C202 IN LINE 59 OF timestamp.h: 'i': undefined identifier
+*** ERROR C141 IN LINE 61 OF timestamp.h: syntax error near 'uint32_t', expected '__asm'
+*** ERROR C202 IN LINE 61 OF timestamp.h: 'temp': undefined identifier
+*** ERROR C202 IN LINE 67 OF timestamp.h: 'temp': undefined identifier
+*** ERROR C202 IN LINE 70 OF timestamp.h: 'temp': undefined identifier
+*** ERROR C171 IN LINE 75 OF timestamp.h: 'break': missing enclosing loop
+*** ERROR C141 IN LINE 79 OF timestamp.h: syntax error near 'uint32_t', expected '__asm'
+*** ERROR C202 IN LINE 79 OF timestamp.h: 'mon_temp': undefined identifier
+*** ERROR C202 IN LINE 80 OF timestamp.h: 'mon_temp': undefined identifier
+*** ERROR C202 IN LINE 81 OF timestamp.h: 'mon_temp': undefined identifier
+*** ERROR C141 IN LINE 106 OF timestamp.h: syntax error near 'uint32_t', expected 'sizeof'
+*** ERROR C202 IN LINE 106 OF timestamp.h: 'y': undefined identifier
+*** ERROR C202 IN LINE 106 OF timestamp.h: 'y': undefined identifier
+*** ERROR C202 IN LINE 106 OF timestamp.h: 'y': undefined identifier
+*** ERROR C141 IN LINE 106 OF timestamp.h: syntax error near ')', expected ';'
+*** ERROR C141 IN LINE 110 OF timestamp.h: syntax error near 'uint8_t', expected 'sizeof'
+*** ERROR C202 IN LINE 110 OF timestamp.h: 'm': undefined identifier
+*** ERROR C202 IN LINE 110 OF timestamp.h: 'm': undefined identifier
+*** ERROR C202 IN LINE 110 OF timestamp.h: 'm': undefined identifier
+*** ERROR C141 IN LINE 110 OF timestamp.h: syntax error near ')', expected ';'
+*** ERROR C202 IN LINE 115 OF timestamp.h: 'm': undefined identifier
+   4          
+   5          int main()
+   6          {
+   7   1          int unixtimestamp = 0;
+   8   1      
+   9   1          scanf("%d", &unixtimestamp);
+  10   1      
+  11   1          time_struct tt_in;
+*** ERROR C141 IN LINE 11 OF test.c: syntax error near 'time_struct', expected '__asm'
+*** ERROR C202 IN LINE 11 OF test.c: 'tt_in': undefined identifier
+  12   1      
+  13   1          tt_in = stamptotime(unixtimestamp);
+*** ERROR C202 IN LINE 13 OF test.c: 'tt_in': undefined identifier
+  14   1          printf("%02d%02d-%02d-%02d %02d:%02d:%02d\n",
+  15   1                 tt_in.h_year, tt_in.l_year, tt_in.mon, tt_in.day, tt_in.hour, tt_in.min, tt_in.sec);
+  16   1      
+  17   1          time_struct t_out = {20, 24, 12, 14, 12, 0, 0}; // Jun 14 2024 120000
+*** ERROR C141 IN LINE 17 OF test.c: syntax error near 'time_struct', expected '__asm'
+*** ERROR C202 IN LINE 17 OF test.c: 't_out': undefined identifier
+*** ERROR C141 IN LINE 17 OF test.c: syntax error near '{', expected 'sizeof'
+*** ERROR C141 IN LINE 17 OF test.c: syntax error near '}', expected ';'
+  18   1          uint32_t stamp = timetostamp(t_out);
+*** ERROR C141 IN LINE 18 OF test.c: syntax error near 'uint32_t', expected '__asm'
+  19   1          printf("Unix timestamp: %u\n", stamp);
+*** ERROR C202 IN LINE 19 OF test.c: 'stamp': undefined identifier
+C51 COMPILER V9.60.7.0   TEST                                                              06/17/2024 15:34:42 PAGE 2   
+
+  20   1      
+  21   1          return 0;
+  22   1      }
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  34 ERROR(S)

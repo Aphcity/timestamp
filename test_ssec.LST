@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   TEST_SSEC                                                         06/17/2024 16:23:17 PAGE 1   
+C51 COMPILER V9.60.7.0   TEST_SSEC                                                         06/17/2024 16:29:10 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TEST_SSEC
 OBJECT MODULE PLACED IN test_ssec.OBJ
-COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE test_ssec.c LARGE OPTIMIZE(0,SPEED) BROWSE INCDIR(..\timestamp;..\timest
-                    -amp) DEBUG OBJECTEXTEND PRINT(.\Out\test_ssec.lst) TABS(2)
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE test_ssec.c LARGE OPTIMIZE(0,SPEED) BROWSE INCDIR(..\timestamp) DEBUG OB
+                    -JECTEXTEND TABS(2)
 
 line level    source
 

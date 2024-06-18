@@ -1,0 +1,342 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    06/18/2024  10:37:32  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+D:\KEIL_V5\C51\BIN\BL51.EXE test.obj TO timestamp PRINT (.\Out\timestamp.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: LARGE
+
+
+INPUT MODULES INCLUDED:
+  test.obj (TEST)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C_STARTUP)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?COPY)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?CLDPTR)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?CLDOPTR)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?CILDOPTR)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?CSTPTR)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?CSTOPTR)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?IMUL)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?UIDIV)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?LMUL)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (PRINTF)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C_INIT)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?PLDIXDATA)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?PSTXDATA)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (?C?CCASE)
+  D:\KEIL_V5\C51\LIB\C51L.LIB (PUTCHAR)
+
+
+LINK MAP OF MODULE:  timestamp (TEST)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0005H     UNIT         _DATA_GROUP_
+                    000DH     0013H                  *** GAP ***
+            BIT     0020H.0   0001H.1   UNIT         _BIT_GROUP_
+                    0021H.1   0000H.7                *** GAP ***
+            IDATA   0022H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0028H     UNIT         _XDATA_GROUP_
+            XDATA   0028H     001BH     UNIT         ?XD?_TS2RTC?TEST
+            XDATA   0043H     0013H     UNIT         ?XD?TEST
+            XDATA   0056H     0012H     UNIT         ?XD?MAIN?TEST
+            XDATA   0068H     000EH     UNIT         ?XD?TIMETOSTAMP?TEST
+            XDATA   0076H     0002H     UNIT         ?XD?_LEAPYEAR_CHECK?TEST
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0499H     UNIT         ?PR?_TS2RTC?TEST
+            CODE    0C99H     0365H     UNIT         ?PR?PRINTF?PRINTF
+            CODE    0FFEH     029FH     UNIT         ?C?LIB_CODE
+            CODE    129DH     0146H     UNIT         ?PR?TIMETOSTAMP?TEST
+            CODE    13E3H     00E9H     UNIT         ?PR?MAIN?TEST
+            CODE    14CCH     008CH     UNIT         ?C_C51STARTUP
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/18/2024  10:37:32  PAGE 2
+
+
+            CODE    1558H     0048H     UNIT         ?PR?_LEAPYEAR_CHECK?TEST
+            CODE    15A0H     0038H     UNIT         ?CO?TEST
+            CODE    15D8H     0027H     UNIT         ?PR?PUTCHAR?PUTCHAR
+            CODE    15FFH     0010H     UNIT         ?C_INITSEG
+            CODE    160FH     000EH     UNIT         ?PR?L_POK_INIT?TEST
+
+
+
+OVERLAY MAP OF MODULE:   timestamp (TEST)
+
+
+SEGMENT                             BIT_GROUP          DATA_GROUP          XDATA_GROUP
+  +--> CALLED SEGMENT            START    LENGTH     START    LENGTH     START    LENGTH
+----------------------------------------------------------------------------------------
+?C_C51STARTUP                    -----    -----      -----    -----      -----    -----
+  +--> ?PR?MAIN?TEST
+  +--> ?C_INITSEG
+
+?PR?MAIN?TEST                    -----    -----      -----    -----      -----    -----
+  +--> ?PR?L_POK_INIT?TEST
+  +--> ?PR?_TS2RTC?TEST
+  +--> ?CO?TEST
+  +--> ?PR?PRINTF?PRINTF
+  +--> ?PR?TIMETOSTAMP?TEST
+
+?PR?_TS2RTC?TEST                 -----    -----      -----    -----      -----    -----
+  +--> ?PR?_LEAPYEAR_CHECK?TEST
+
+?PR?PRINTF?PRINTF                0020H.0  0001H.1    0008H    0005H      0000H    0028H
+  +--> ?PR?PUTCHAR?PUTCHAR
+
+?PR?TIMETOSTAMP?TEST             -----    -----      -----    -----      -----    -----
+  +--> ?PR?_LEAPYEAR_CHECK?TEST
+
+
+
+SYMBOL TABLE OF MODULE:  timestamp (TEST)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        TEST
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  C:160FH         PUBLIC        L_pok_init
+  D:00B8H         PUBLIC        IP
+  B:0098H.1       PUBLIC        TI
+  C:13E3H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:1558H         PUBLIC        _leapyear_check
+  X:0043H         PUBLIC        time_struct
+  C:129DH         PUBLIC        timetostamp
+  C:0800H         PUBLIC        _TS2RTC
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/18/2024  10:37:32  PAGE 3
+
+
+  X:004AH         PUBLIC        month_buf
+  D:008DH         PUBLIC        TH1
+  B:0088H.6       PUBLIC        TR1
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          L_POK_INIT
+  C:160FH         LINE#         10
+  C:160FH         LINE#         11
+  C:160FH         LINE#         13
+  C:1612H         LINE#         14
+  C:1615H         LINE#         15
+  C:1618H         LINE#         16
+  C:161AH         LINE#         17
+  C:161CH         LINE#         19
+  -------         ENDPROC       L_POK_INIT
+  -------         PROC          _LEAPYEAR_CHECK
+  X:0076H         SYMBOL        y
+  C:1558H         LINE#         23
+  C:1560H         LINE#         24
+  C:1560H         LINE#         25
+  C:159FH         LINE#         26
+  -------         ENDPROC       _LEAPYEAR_CHECK
+  -------         PROC          _TS2RTC
+  X:0028H         SYMBOL        unixtimestamp
+  X:002AH         SYMBOL        RTC_out
+  -------         DO            
+  X:002DH         SYMBOL        min_add
+  X:002FH         SYMBOL        hour_add
+  X:0031H         SYMBOL        day_add
+  X:0033H         SYMBOL        mon_add
+  X:0035H         SYMBOL        year_add
+  X:0037H         SYMBOL        day_temp
+  X:0039H         SYMBOL        mon_temp
+  X:003BH         SYMBOL        year_temp
+  X:003DH         SYMBOL        i
+  X:003FH         SYMBOL        a
+  X:0041H         SYMBOL        temp
+  -------         ENDDO         
+  C:0800H         LINE#         30
+  C:0811H         LINE#         31
+  C:0811H         LINE#         32
+  C:081CH         LINE#         38
+  C:082CH         LINE#         39
+  C:0842H         LINE#         40
+  C:0858H         LINE#         41
+  C:086EH         LINE#         48
+  C:0885H         LINE#         49
+  C:08A9H         LINE#         51
+  C:08BEH         LINE#         52
+  C:08E4H         LINE#         54
+  C:08F9H         LINE#         55
+  C:091FH         LINE#         57
+  C:093EH         LINE#         59
+  C:095EH         LINE#         60
+  C:095EH         LINE#         61
+  C:0973H         LINE#         62
+  C:09BEH         LINE#         63
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/18/2024  10:37:32  PAGE 4
+
+
+  C:0A10H         LINE#         65
+  C:0A1BH         LINE#         66
+  C:0A1BH         LINE#         67
+  C:0A23H         LINE#         68
+  C:0A23H         LINE#         70
+  C:0A47H         LINE#         71
+  C:0A47H         LINE#         72
+  C:0A55H         LINE#         73
+  C:0A89H         LINE#         74
+  C:0A8BH         LINE#         76
+  C:0A8BH         LINE#         77
+  C:0AA8H         LINE#         78
+  C:0AAAH         LINE#         79
+  C:0AAAH         LINE#         80
+  C:0ABBH         LINE#         82
+  C:0AE7H         LINE#         83
+  C:0B2AH         LINE#         84
+  C:0B6AH         LINE#         86
+  C:0B7AH         LINE#         87
+  C:0B7AH         LINE#         88
+  C:0B85H         LINE#         89
+  C:0BA4H         LINE#         90
+  C:0BBBH         LINE#         91
+  C:0BD0H         LINE#         92
+  C:0BD2H         LINE#         94
+  C:0BD2H         LINE#         95
+  C:0BE2H         LINE#         96
+  C:0BE2H         LINE#         98
+  C:0BFFH         LINE#         100
+  C:0C93H         LINE#         101
+  C:0C96H         LINE#         102
+  C:0C98H         LINE#         103
+  -------         ENDPROC       _TS2RTC
+  -------         PROC          TIMETOSTAMP
+  X:0068H         SYMBOL        t_in
+  -------         DO            
+  X:006FH         SYMBOL        stamp
+  X:0071H         SYMBOL        year
+  X:0073H         SYMBOL        y
+  X:0075H         SYMBOL        m
+  -------         ENDDO         
+  C:129DH         LINE#         105
+  C:129DH         LINE#         106
+  C:129DH         LINE#         107
+  C:12A4H         LINE#         108
+  C:12C3H         LINE#         112
+  C:12DFH         LINE#         113
+  C:1314H         LINE#         115
+  C:1329H         LINE#         116
+  C:133DH         LINE#         117
+  C:134DH         LINE#         119
+  C:1380H         LINE#         121
+  C:13DDH         LINE#         123
+  C:13E2H         LINE#         124
+  -------         ENDPROC       TIMETOSTAMP
+  -------         PROC          MAIN
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/18/2024  10:37:32  PAGE 5
+
+
+  X:0056H         SYMBOL        unixtimestamp
+  X:0058H         SYMBOL        t_in
+  X:005FH         SYMBOL        t_out
+  X:0066H         SYMBOL        stamp
+  -------         ENDDO         
+  C:13E3H         LINE#         126
+  C:13E3H         LINE#         127
+  C:13E3H         LINE#         133
+  C:13EDH         LINE#         134
+  C:13F3H         LINE#         135
+  C:13F7H         LINE#         136
+  C:13FBH         LINE#         137
+  C:13FDH         LINE#         138
+  C:13FFH         LINE#         139
+  C:1403H         LINE#         140
+  C:1407H         LINE#         142
+  C:140AH         LINE#         144
+  C:140AH         LINE#         145
+  C:140AH         LINE#         152
+  C:141BH         LINE#         153
+  C:1481H         LINE#         155
+  C:14AFH         LINE#         156
+  C:14C8H         LINE#         157
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        TEST
+
+  -------         MODULE        ?C?COPY
+  C:10CEH         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+  -------         MODULE        ?C?CLDPTR
+  C:10F4H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CLDOPTR
+  C:110DH         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?CILDOPTR
+  C:113AH         PUBLIC        ?C?CILDOPTR
+  -------         ENDMOD        ?C?CILDOPTR
+
+  -------         MODULE        ?C?CSTPTR
+  C:116DH         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        ?C?CSTOPTR
+  C:117FH         PUBLIC        ?C?CSTOPTR
+  -------         ENDMOD        ?C?CSTOPTR
+
+  -------         MODULE        ?C?IMUL
+  C:11A1H         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+  -------         MODULE        ?C?UIDIV
+  C:11B3H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  06/18/2024  10:37:32  PAGE 6
+
+
+
+  -------         MODULE        ?C?LMUL
+  C:1208H         PUBLIC        ?C?LMUL
+  -------         ENDMOD        ?C?LMUL
+
+  -------         MODULE        PRINTF
+  X:0000H         PUBLIC        ?_PRINTF517?BYTE
+  X:0000H         PUBLIC        ?_PRINTF?BYTE
+  X:0000H         PUBLIC        ?_SPRINTF517?BYTE
+  X:0000H         PUBLIC        ?_SPRINTF?BYTE
+  C:0D04H         PUBLIC        _PRINTF
+  C:0D04H         PUBLIC        _PRINTF517
+  C:0CFEH         PUBLIC        _SPRINTF
+  C:0CFEH         PUBLIC        _SPRINTF517
+  -------         ENDMOD        PRINTF
+
+  -------         MODULE        ?C?PLDIXDATA
+  C:1257H         PUBLIC        ?C?PLDIXDATA
+  -------         ENDMOD        ?C?PLDIXDATA
+
+  -------         MODULE        ?C?PSTXDATA
+  C:126EH         PUBLIC        ?C?PSTXDATA
+  -------         ENDMOD        ?C?PSTXDATA
+
+  -------         MODULE        ?C?CCASE
+  C:1277H         PUBLIC        ?C?CCASE
+  -------         ENDMOD        ?C?CCASE
+
+  -------         MODULE        PUTCHAR
+  C:15D8H         PUBLIC        _PUTCHAR
+  -------         ENDMOD        PUTCHAR
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0765H BYTE (92%) *
+******************************************************************************
+
+Program Size: data=15.1 xdata=120 code=3616
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

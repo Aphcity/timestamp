@@ -1,0 +1,3 @@
+"test.obj" 
+TO "timestamp" 
+PRINT(".\Out\timestamp.m51") RAMSIZE(256) 

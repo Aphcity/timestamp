@@ -1,71 +1,189 @@
-C51 COMPILER V9.60.7.0   TEST                                                              06/17/2024 15:34:42 PAGE 1   
+C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 10:37:32 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TEST
 OBJECT MODULE PLACED IN test.OBJ
-COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE test.c LARGE OPTIMIZE(0,SPEED) BROWSE INCDIR(..\timestamp) DEBUG OBJECTE
-                    -XTEND PRINT(.\Out\test.lst) TABS(2)
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE test.c LARGE OPTIMIZE(0,SPEED) BROWSE INCDIR(..\timestamp;..\timestamp) 
+                    -DEBUG OBJECTEXTEND PRINT(.\Out\test.lst) TABS(2)
 
 line level    source
 
-   1          //#include "stdafx.h"
-   2          #include <stdio.h>
-   3          #include "timestamp.h"
-*** WARNING C318 IN LINE 1 OF timestamp.h: can't open file 'stdint.h'
-*** ERROR C141 IN LINE 55 OF timestamp.h: syntax error near 'uint32_t', expected 'sizeof'
-*** ERROR C202 IN LINE 55 OF timestamp.h: 'i': undefined identifier
-*** ERROR C202 IN LINE 55 OF timestamp.h: 'i': undefined identifier
-*** ERROR C141 IN LINE 55 OF timestamp.h: syntax error near ')', expected ';'
-*** ERROR C202 IN LINE 59 OF timestamp.h: 'i': undefined identifier
-*** ERROR C141 IN LINE 61 OF timestamp.h: syntax error near 'uint32_t', expected '__asm'
-*** ERROR C202 IN LINE 61 OF timestamp.h: 'temp': undefined identifier
-*** ERROR C202 IN LINE 67 OF timestamp.h: 'temp': undefined identifier
-*** ERROR C202 IN LINE 70 OF timestamp.h: 'temp': undefined identifier
-*** ERROR C171 IN LINE 75 OF timestamp.h: 'break': missing enclosing loop
-*** ERROR C141 IN LINE 79 OF timestamp.h: syntax error near 'uint32_t', expected '__asm'
-*** ERROR C202 IN LINE 79 OF timestamp.h: 'mon_temp': undefined identifier
-*** ERROR C202 IN LINE 80 OF timestamp.h: 'mon_temp': undefined identifier
-*** ERROR C202 IN LINE 81 OF timestamp.h: 'mon_temp': undefined identifier
-*** ERROR C141 IN LINE 106 OF timestamp.h: syntax error near 'uint32_t', expected 'sizeof'
-*** ERROR C202 IN LINE 106 OF timestamp.h: 'y': undefined identifier
-*** ERROR C202 IN LINE 106 OF timestamp.h: 'y': undefined identifier
-*** ERROR C202 IN LINE 106 OF timestamp.h: 'y': undefined identifier
-*** ERROR C141 IN LINE 106 OF timestamp.h: syntax error near ')', expected ';'
-*** ERROR C141 IN LINE 110 OF timestamp.h: syntax error near 'uint8_t', expected 'sizeof'
-*** ERROR C202 IN LINE 110 OF timestamp.h: 'm': undefined identifier
-*** ERROR C202 IN LINE 110 OF timestamp.h: 'm': undefined identifier
-*** ERROR C202 IN LINE 110 OF timestamp.h: 'm': undefined identifier
-*** ERROR C141 IN LINE 110 OF timestamp.h: syntax error near ')', expected ';'
-*** ERROR C202 IN LINE 115 OF timestamp.h: 'm': undefined identifier
-   4          
-   5          int main()
-   6          {
-   7   1          int unixtimestamp = 0;
-   8   1      
-   9   1          scanf("%d", &unixtimestamp);
-  10   1      
-  11   1          time_struct tt_in;
-*** ERROR C141 IN LINE 11 OF test.c: syntax error near 'time_struct', expected '__asm'
-*** ERROR C202 IN LINE 11 OF test.c: 'tt_in': undefined identifier
-  12   1      
-  13   1          tt_in = stamptotime(unixtimestamp);
-*** ERROR C202 IN LINE 13 OF test.c: 'tt_in': undefined identifier
-  14   1          printf("%02d%02d-%02d-%02d %02d:%02d:%02d\n",
-  15   1                 tt_in.h_year, tt_in.l_year, tt_in.mon, tt_in.day, tt_in.hour, tt_in.min, tt_in.sec);
-  16   1      
-  17   1          time_struct t_out = {20, 24, 12, 14, 12, 0, 0}; // Jun 14 2024 120000
-*** ERROR C141 IN LINE 17 OF test.c: syntax error near 'time_struct', expected '__asm'
-*** ERROR C202 IN LINE 17 OF test.c: 't_out': undefined identifier
-*** ERROR C141 IN LINE 17 OF test.c: syntax error near '{', expected 'sizeof'
-*** ERROR C141 IN LINE 17 OF test.c: syntax error near '}', expected ';'
-  18   1          uint32_t stamp = timetostamp(t_out);
-*** ERROR C141 IN LINE 18 OF test.c: syntax error near 'uint32_t', expected '__asm'
-  19   1          printf("Unix timestamp: %u\n", stamp);
-*** ERROR C202 IN LINE 19 OF test.c: 'stamp': undefined identifier
-C51 COMPILER V9.60.7.0   TEST                                                              06/17/2024 15:34:42 PAGE 2   
+   1          #include <REG52.H> /* special function register declarations   */
+   2                             /* for the intended 8051 derivative         */
+   3          #include <stdio.h>
+   4          #include "timestamp.h"
+   5          
+   6          #ifdef MONITOR51                /* Debugging with Monitor-51 needs   */
+              char code reserve[3] _at_ 0x23; /* space for serial interrupt if     */
+              #endif                          /* Stop Exection with Serial Intr.   */
+   9          
+  10          void L_pok_init(void)
+  11          {
+  12   1      #ifndef MONITOR51
+  13   1          SCON = 0x50;  /* SCON: mode 1, 8-bit UART, enable rcvr      */
+  14   1          TMOD |= 0x20; /* TMOD: timer 1, mode 2, 8-bit reload        */
+  15   1          TH1 = 221;    /* TH1:  reload value for 1200 baud @ 16MHz   */
+  16   1          TR1 = 1;      /* TR1:  timer 1 run                          */
+  17   1          TI = 1;       /* TI:   set TI to send first char of UART    */
+  18   1      #endif
+  19   1      }
+  20          
+  21          TS_time_ time_struct;
+  22          
+  23          uint32_t leapyear_check(uint32_t y)
+  24          {
+  25   1          return (0 == y % 4 && y % 100 != 0) || y % 400 == 0;
+  26   1      }
+  27          
+  28          const uint8_t month_buf[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  29          
+  30          uint8_t TS2RTC(uint32_t unixtimestamp, TS_time_ *RTC_out)
+  31          {
+  32   1          uint32_t min_add, hour_add, day_add, mon_add = 0, year_add = 0;
+  33   1          uint32_t day_temp, mon_temp, year_temp;
+  34   1          uint32_t i;
+  35   1          uint32_t a;
+  36   1          uint32_t temp;
+  37   1      
+  38   1          RTC_out->h_year = 19;
+  39   1          RTC_out->l_year = 70;
+  40   1          RTC_out->mon = 1;
+  41   1          RTC_out->day = 1;
+  42   1          // RTC_out->hour = 0;
+  43   1          // RTC_out->min = 0;
+  44   1          // RTC_out->sec = 0;
+  45   1      
+  46   1          // &RTC_out = {19, 70, 1, 1, 0, 0, 0};
+  47   1      
+  48   1          min_add = unixtimestamp / 60;
+  49   1          RTC_out->sec = unixtimestamp % 60;
+  50   1      
+  51   1          hour_add = min_add / 60;
+  52   1          RTC_out->min = min_add % 60;
+  53   1      
+  54   1          day_add = hour_add / 24;
+C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 10:37:32 PAGE 2   
 
-  20   1      
-  21   1          return 0;
-  22   1      }
+  55   1          RTC_out->hour = hour_add % 24;
+  56   1      
+  57   1          day_temp = RTC_out->hour;
+  58   1      
+  59   1          for (i = RTC_out->mon - 1;; i++)
+  60   1          {
+  61   2              a = i % 12;
+  62   2              year_temp = RTC_out->h_year * 100 + RTC_out->l_year + (i / 12);
+  63   2              temp = (a == 1 && leapyear_check(year_temp)) ? (month_buf[a] + 1) : month_buf[a];
+  64   2      
+  65   2              if (mon_add)
+  66   2              {
+  67   3                  day_temp = 1;
+  68   3              }
+  69   2      
+  70   2              if (day_add + day_temp > temp)
+  71   2              {
+  72   3                  mon_add++;
+  73   3                  day_add -= (temp - day_temp + 1);
+  74   3              }
+  75   2              else
+  76   2              {
+  77   3                  RTC_out->day += day_add;
+  78   3                  break;
+  79   3              }
+  80   2          }
+  81   1      
+  82   1          mon_temp = RTC_out->mon + mon_add;
+  83   1          year_add = (mon_temp % 12 == 0) ? mon_temp / 12 - 1 : mon_temp / 12;
+  84   1          RTC_out->mon = (mon_temp % 12 == 0) ? 12 : mon_temp % 12;
+  85   1      
+  86   1          if (year_add > 30)
+  87   1          {
+  88   2              year_add -= 30;
+  89   2              RTC_out->h_year = 20 + year_add / 100;
+  90   2              year_add = year_add % 100;
+  91   2              RTC_out->l_year = 0;
+  92   2          }
+  93   1          else
+  94   1          {
+  95   2              RTC_out->h_year = 19;
+  96   2          }
+  97   1      
+  98   1          RTC_out->l_year += year_add;
+  99   1      
+ 100   1          if (RTC_out->h_year != 19 && RTC_out->l_year != 70 && RTC_out->mon != 1 && RTC_out->day != 1 && RTC_ou
+             -t->hour != 0 && RTC_out->min != 0 && RTC_out->sec != 0)
+ 101   1              return 1;
+ 102   1          return -1;
+ 103   1      }
+ 104          
+ 105          uint32_t timetostamp(TS_time_ t_in)
+ 106          {
+ 107   1          uint32_t stamp = 0;
+ 108   1          uint32_t year = t_in.h_year * 100 + t_in.l_year;
+ 109   1          uint32_t y;
+ 110   1          uint8_t m;
+ 111   1      
+ 112   1          for (y = 1970; y < year; y++)
+ 113   1              stamp += leapyear_check(y) ? 366 * 86400 : 365 * 86400;
+ 114   1      
+ 115   1          for (m = 0; m < t_in.mon - 1; m++)
+C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 10:37:32 PAGE 3   
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  34 ERROR(S)
+ 116   1              if (m == 1 && leapyear_check(year))
+ 117   1                  stamp += 29 * 86400;
+ 118   1              else
+ 119   1                  stamp += month_buf[m] * 86400;
+ 120   1      
+ 121   1          stamp += (t_in.day - 1) * 86400 + t_in.hour * 3600 + t_in.min * 60 + t_in.sec;
+ 122   1      
+ 123   1          return stamp;
+ 124   1      }
+ 125          
+ 126          void main(void)
+ 127          {
+ 128   1          uint32_t unixtimestamp;
+ 129   1          TS_time_ t_in;
+ 130   1          TS_time_ t_out;
+ 131   1          uint32_t stamp;
+ 132   1      
+ 133   1          unixtimestamp = 114514;
+ 134   1          t_out.h_year = 20;
+ 135   1          t_out.l_year = 24;
+ 136   1          t_out.mon = 1;
+ 137   1          t_out.day = 1;
+ 138   1          t_out.hour = 1;
+ 139   1          t_out.min = 11;
+ 140   1          t_out.sec = 1;
+ 141   1      
+ 142   1          L_pok_init();
+ 143   1      
+ 144   1          while (1)
+ 145   1          {
+ 146   2      
+ 147   2              // if (TS2RTC(unixtimestamp, &t_in) != -1)
+ 148   2              //     printf("%02d%02d-%02d-%02d %02d:%02d:%02d\n", (int)t_in.h_year, (int)t_in.l_year, (int)t_in
+             -.mon, (int)t_in.day, (int)t_in.hour, (int)t_in.min, (int)t_in.sec);
+ 149   2              // else
+ 150   2              //     printf("Illegal Input!\n");
+ 151   2      
+ 152   2              TS2RTC(unixtimestamp, &t_in);
+ 153   2              printf("%02d%02d-%02d-%02d %02d:%02d:%02d\n", (int)t_in.h_year, (int)t_in.l_year, (int)t_in.mon, (
+             -int)t_in.day, (int)t_in.hour, (int)t_in.min, (int)t_in.sec);
+ 154   2      
+ 155   2              stamp = timetostamp(t_out);
+ 156   2              printf("Unix timestamp: %lu\n", stamp);
+ 157   2          }
+ 158   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1822    ----
+   CONSTANT SIZE    =     56    ----
+   XDATA SIZE       =     80    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

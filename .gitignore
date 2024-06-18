@@ -5,3 +5,12 @@
 .vsc/
 
 *.exe
+test.OBJ
+timestamp
+timestamp.build_log.htm
+timestamp.uvgui.Aphcity
+timestamp.uvmpw.uvgui.Aphcity
+timestamp.uvopt
+timestamp.uvproj
+Out/test.lst
+Out/timestamp.m51

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 10:37:32 PAGE 1   
+C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 11:47:51 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TEST
@@ -62,7 +62,7 @@ line level    source
   52   1          RTC_out->min = min_add % 60;
   53   1      
   54   1          day_add = hour_add / 24;
-C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 10:37:32 PAGE 2   
+C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 11:47:51 PAGE 2   
 
   55   1          RTC_out->hour = hour_add % 24;
   56   1      
@@ -126,7 +126,7 @@ line level    source
  113   1              stamp += leapyear_check(y) ? 366 * 86400 : 365 * 86400;
  114   1      
  115   1          for (m = 0; m < t_in.mon - 1; m++)
-C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 10:37:32 PAGE 3   
+C51 COMPILER V9.60.7.0   TEST                                                              06/18/2024 11:47:51 PAGE 3   
 
  116   1              if (m == 1 && leapyear_check(year))
  117   1                  stamp += 29 * 86400;

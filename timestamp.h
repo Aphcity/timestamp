@@ -54,11 +54,11 @@ extern RTC_time_32 *RTC16to32(const RTC_time_16 *RTC16);
 
 extern RTC_time_32 *RTC8to32(const RTC_time_8 *RTC8);
 
-extern uint8_t RTC32to16(const RTC_time_32 *RTC32, RTC_time_16 *RTC16);
+// extern uint8_t RTC32to16(const RTC_time_32 *RTC32, RTC_time_16 *RTC16);
 
-extern uint8_t RTC16to8(const RTC_time_16 *RTC16, RTC_time_8 *RTC8);
+// extern uint8_t RTC16to8(const RTC_time_16 *RTC16, RTC_time_8 *RTC8);
 
-extern uint8_t RTC32to8(const RTC_time_32 *RTC32, RTC_time_8 *RTC8);
+// extern uint8_t RTC32to8(const RTC_time_32 *RTC32, RTC_time_8 *RTC8);
 
 extern uint8_t RTC_init(RTC_time_8 *RTC8);
 

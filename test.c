@@ -55,59 +55,57 @@ RTC_time_32 *RTC8to32(const RTC_time_8 *RTC8)
     return RTC16to32(RTC8to16(RTC8));
 }
 
-uint8_t RTC32to16(const RTC_time_32 *RTC32, RTC_time_16 *RTC16)
-{
-    uint16_t *arr;
-    arr = (uint16_t *)malloc(sizeof(uint16_t));
-    arr = (uint16_t *)&RTC32->h_year;
-    RTC16->h_year = *arr;
-    arr = (uint16_t *)&RTC32->l_year;
-    RTC16->l_year = *arr;
-    arr = (uint16_t *)&RTC32->mon;
-    RTC16->mon = *arr;
-    arr = (uint16_t *)&RTC32->day;
-    RTC16->day = *arr;
-    arr = (uint16_t *)&RTC32->hour;
-    RTC16->hour = *arr;
-    arr = (uint16_t *)&RTC32->min;
-    RTC16->min = *arr;
-    arr = (uint16_t *)&RTC32->sec;
-    RTC16->sec = *arr;
-    free(arr);
+// uint8_t RTC32to16(const RTC_time_32 *RTC32, RTC_time_16 *RTC16)
+// {
+//     uint16_t *arr;
+//     arr = (uint16_t *)malloc(sizeof(uint16_t));
+//     arr = (uint16_t *)&RTC32->h_year;
+//     RTC16->h_year = *arr;
+//     arr = (uint16_t *)&RTC32->l_year;
+//     RTC16->l_year = *arr;
+//     arr = (uint16_t *)&RTC32->mon;
+//     RTC16->mon = *arr;
+//     arr = (uint16_t *)&RTC32->day;
+//     RTC16->day = *arr;
+//     arr = (uint16_t *)&RTC32->hour;
+//     RTC16->hour = *arr;
+//     arr = (uint16_t *)&RTC32->min;
+//     RTC16->min = *arr;
+//     arr = (uint16_t *)&RTC32->sec;
+//     RTC16->sec = *arr;
+//     free(arr);
+//     return 1;
+// }
 
-    return 1;
-}
+// uint8_t RTC16to8(const RTC_time_16 *RTC16, RTC_time_8 *RTC8)
+// {
+//     uint8_t *arr;
+//     arr = (uint8_t *)malloc(sizeof(uint8_t));
+//     arr = (uint8_t *)&RTC16->h_year;
+//     RTC8->h_year = *arr;
+//     arr = (uint8_t *)&RTC16->l_year;
+//     RTC8->l_year = *arr;
+//     arr = (uint8_t *)&RTC16->mon;
+//     RTC8->mon = *arr;
+//     arr = (uint8_t *)&RTC16->day;
+//     RTC8->day = *arr;
+//     arr = (uint8_t *)&RTC16->hour;
+//     RTC8->hour = *arr;
+//     arr = (uint8_t *)&RTC16->min;
+//     RTC8->min = *arr;
+//     arr = (uint8_t *)&RTC16->sec;
+//     RTC8->sec = *arr;
+//     free(arr);
+//     return 1;
+// }
 
-uint8_t RTC16to8(const RTC_time_16 *RTC16, RTC_time_8 *RTC8)
-{
-    uint8_t *arr;
-    arr = (uint8_t *)malloc(sizeof(uint8_t));
-    arr = (uint8_t *)&RTC16->h_year;
-    RTC8->h_year = *arr;
-    arr = (uint8_t *)&RTC16->l_year;
-    RTC8->l_year = *arr;
-    arr = (uint8_t *)&RTC16->mon;
-    RTC8->mon = *arr;
-    arr = (uint8_t *)&RTC16->day;
-    RTC8->day = *arr;
-    arr = (uint8_t *)&RTC16->hour;
-    RTC8->hour = *arr;
-    arr = (uint8_t *)&RTC16->min;
-    RTC8->min = *arr;
-    arr = (uint8_t *)&RTC16->sec;
-    RTC8->sec = *arr;
-    free(arr);
-
-    return 1;
-}
-
-uint8_t RTC32to8(const RTC_time_32 *RTC32, RTC_time_8 *RTC8)
-{
-    RTC_time_16 *RTC16;
-    RTC32to16(RTC32, RTC16);
-    RTC16to8(RTC16, RTC8);
-    return 1;
-}
+// uint8_t RTC32to8(const RTC_time_32 *RTC32, RTC_time_8 *RTC8)
+// {
+//     RTC_time_16 *RTC16;
+//     RTC32to16(RTC32, RTC16);
+//     RTC16to8(RTC16, RTC8);
+//     return 1;
+// }
 
 uint8_t RTC_init(RTC_time_8 *RTC8)
 {
@@ -199,21 +197,16 @@ uint32_t TS2RTC(uint32_t TS_in, RTC_time_8 *RTC_out)
 
 uint32_t RTC2TS(const RTC_time_8 *RTC_in)
 {
-    uint32_t TS_out;
-    uint32_t h_year = (uint32_t)RTC_in->h_year;
-    uint32_t h_yearMULTI100 = h_year * 100;
-    uint32_t l_year = (uint32_t)RTC_in->l_year;
-    uint32_t year = h_yearMULTI100 + l_year;
+    uint32_t TS_out, year, day2stamp, hour2stamp, min2stamp, sec2stamp;
     uint16_t y_u16;
-    uint32_t daySUB1 = (uint32_t)(RTC_in->day - 1);
-    uint32_t day2stamp = daySUB1 * 86400;
-    uint32_t hour = (uint32_t)RTC_in->hour;
-    uint32_t hour2stamp = hour * 3600;
-    uint32_t min2stamp = (uint32_t)RTC_in->min * 60;
-    uint32_t sec2stamp = (uint32_t)RTC_in->sec;
     uint8_t m_u8;
 
     TS_out = 0;
+    year = (uint32_t)RTC_in->h_year * 100L + (uint32_t)RTC_in->l_year;
+    day2stamp = (uint32_t)(RTC_in->day - 1) * 86400L;
+    hour2stamp = (uint32_t)RTC_in->hour * 3600L;
+    min2stamp = (uint32_t)RTC_in->min * 60L;
+    sec2stamp = (uint32_t)RTC_in->sec;
 
     for (y_u16 = 1970; y_u16 < year; y_u16++)
     {
@@ -256,15 +249,6 @@ void CRTCTS_init(void)
     {
         scanf("%lu", &TS_to_RTC);
         TS2RTC(TS_to_RTC, &RTC_from_TS);
-
-        // RTC_from_TS_h_year = (uint32_t)RTC_from_TS.h_year;
-        // RTC_from_TS_l_year = (uint32_t)RTC_from_TS.l_year;
-        // RTC_from_TS_mon = (uint32_t)RTC_from_TS.mon;
-        // RTC_from_TS_day = (uint32_t)RTC_from_TS.day;
-        // RTC_from_TS_hour = (uint32_t)RTC_from_TS.hour;
-        // RTC_from_TS_min = (uint32_t)RTC_from_TS.min;
-        // RTC_from_TS_sec = (uint32_t)RTC_from_TS.sec;
-
         RTC_print(&RTC_from_TS);
         TS_from_RTC = RTC2TS(&RTC_to_TS);
         printf("Unix timestamp: %lu\n", TS_from_RTC);

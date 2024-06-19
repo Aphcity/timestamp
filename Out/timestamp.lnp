@@ -1,3 +1,0 @@
-".\Out\test.obj" 
-TO ".\Out\timestamp" 
-PRINT(".\Out\timestamp.m51") RAMSIZE(256) 

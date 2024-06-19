@@ -18,16 +18,16 @@ void L_pok_init(void)
 #endif
 }
 
-TS_time_ time_struct;
+TS_time_32 time_struct;
 
-uint32_t leapyear_check(uint32_t y)
+uint8_t leapyear_check(uint16_t year_u16)
 {
-    return (0 == y % 4 && y % 100 != 0) || y % 400 == 0;
+    return (0 == year_u16 % 4 && year_u16 % 100 != 0) || year_u16 % 400 == 0;
 }
 
 const uint32_t month_buf[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-uint32_t TS2RTC(uint32_t unixtimestamp, TS_time_ *RTC_out)
+uint32_t TS2RTC(uint32_t TS_in, TS_time_32 *RTC_out)
 {
     uint32_t min_add, hour_add, day_add, mon_add = 0, year_add = 0;
     uint32_t day_temp, mon_temp, year_temp;
@@ -41,8 +41,8 @@ uint32_t TS2RTC(uint32_t unixtimestamp, TS_time_ *RTC_out)
     RTC_out->min = 0;
     RTC_out->sec = 0;
 
-    min_add = unixtimestamp / 60;
-    RTC_out->sec = (uint8_t)(unixtimestamp % 60);
+    min_add = TS_in / 60;
+    RTC_out->sec = (uint8_t)(TS_in % 60);
 
     hour_add = min_add / 60;
     RTC_out->min = (uint8_t)(min_add % 60);
@@ -96,76 +96,87 @@ uint32_t TS2RTC(uint32_t unixtimestamp, TS_time_ *RTC_out)
     return -1;
 }
 
-uint32_t timetostamp(TS_time_ t_in)
+uint32_t RTC2TS(const TS_time_32 *RTC_in)
 {
-    uint32_t stamp = 0;
-    uint32_t h_year = (uint32_t)t_in.h_year;
+    uint32_t TS_out = 0;
+    uint32_t h_year = (uint32_t)RTC_in->h_year;
     uint32_t h_yearMULTI100 = h_year * 100;
-    uint32_t l_year = (uint32_t)t_in.l_year;
+    uint32_t l_year = (uint32_t)RTC_in->l_year;
     uint32_t year = h_yearMULTI100 + l_year;
-    uint32_t y;
-    uint32_t daySUB1 = (uint32_t)(t_in.day - 1);
+    uint16_t y_u16;
+    uint32_t daySUB1 = (uint32_t)(RTC_in->day - 1);
     uint32_t day2stamp = daySUB1 * 86400;
-    uint32_t hour = (uint32_t)t_in.hour;
+    uint32_t hour = (uint32_t)RTC_in->hour;
     uint32_t hour2stamp = hour * 3600;
-    uint32_t min2stamp = (uint32_t)t_in.min * 60;
-    uint32_t sec2stamp = (uint32_t)t_in.sec;
-    uint32_t m;
+    uint32_t min2stamp = (uint32_t)RTC_in->min * 60;
+    uint32_t sec2stamp = (uint32_t)RTC_in->sec;
+    uint8_t m_u8;
 
-    for (y = 1970; y < year; y++)
-        stamp += leapyear_check(y) ? 366 * 86400 : 365 * 86400;
+    for (y_u16 = 1970; y_u16 < year; y_u16++)
+    {
+        TS_out += leapyear_check(y_u16) ? 366 * 86400 : 365 * 86400;
+    }
 
-    for (m = 0; m < (uint32_t)(t_in.mon - 1); m++)
-        if (m == 1 && leapyear_check(year))
-            stamp += 29 * 86400;
+    for (m_u8 = 0; m_u8 < (RTC_in->mon - 1); m_u8++)
+    {
+        if (m_u8 == 1 && leapyear_check(year))
+            TS_out += 29 * 86400;
         else
-            stamp += month_buf[m] * 86400;
+            TS_out += month_buf[m_u8] * 86400;
+    }
 
-    stamp += day2stamp + hour2stamp + min2stamp + sec2stamp;
+    TS_out += (day2stamp + hour2stamp + min2stamp + sec2stamp);
 
-    return stamp;
+    return TS_out;
+}
+
+void CRTCTS_init(void)
+{
+    uint32_t TS_to_RTC;
+    TS_time_32 RTC_from_TS;
+    TS_time_32 RTC_to_TS;
+    uint32_t TS_from_RTC;
+
+    uint32_t RTC_from_TS_h_year;
+    uint32_t RTC_from_TS_l_year;
+    uint32_t RTC_from_TS_mon;
+    uint32_t RTC_from_TS_day;
+    uint32_t RTC_from_TS_hour;
+    uint32_t RTC_from_TS_min;
+    uint32_t RTC_from_TS_sec;
+
+    TS_to_RTC = 1704071461;
+    RTC_to_TS.h_year = 20;
+    RTC_to_TS.l_year = 24;
+    RTC_to_TS.mon = 12;
+    RTC_to_TS.day = 1;
+    RTC_to_TS.hour = 1;
+    RTC_to_TS.min = 11;
+    RTC_to_TS.sec = 1;
+
+    L_pok_init();
+
+    // while (0)
+    while (1)
+    {
+        scanf("%lu", &TS_to_RTC);
+        TS2RTC(TS_to_RTC, &RTC_from_TS);
+        RTC_from_TS_h_year = (uint32_t)RTC_from_TS.h_year;
+        RTC_from_TS_l_year = (uint32_t)RTC_from_TS.l_year;
+        RTC_from_TS_mon = (uint32_t)RTC_from_TS.mon;
+        RTC_from_TS_day = (uint32_t)RTC_from_TS.day;
+        RTC_from_TS_hour = (uint32_t)RTC_from_TS.hour;
+        RTC_from_TS_min = (uint32_t)RTC_from_TS.min;
+        RTC_from_TS_sec = (uint32_t)RTC_from_TS.sec;
+
+        printf("%02lu%02lu-%02lu-%02lu %02lu:%02lu:%02lu\n", RTC_from_TS.h_year, RTC_from_TS.l_year, RTC_from_TS.mon, RTC_from_TS.day, RTC_from_TS.hour, RTC_from_TS.min, RTC_from_TS.sec);
+
+        TS_from_RTC = RTC2TS(&RTC_to_TS);
+        printf("Unix timestamp: %lu\n", TS_from_RTC);
+    }
 }
 
 void main(void)
 {
-    uint32_t unixtimestamp;
-    TS_time_ t_in;
-    TS_time_ t_out;
-    uint32_t stamp;
-
-    uint32_t t_in_h_year;
-    uint32_t t_in_l_year;
-    uint32_t t_in_mon;
-    uint32_t t_in_day;
-    uint32_t t_in_hour;
-    uint32_t t_in_min;
-    uint32_t t_in_sec;
-
-    unixtimestamp = 1704071461;
-    t_out.h_year = 20;
-    t_out.l_year = 24;
-    t_out.mon = 1;
-    t_out.day = 1;
-    t_out.hour = 1;
-    t_out.min = 11;
-    t_out.sec = 1;
-
-    L_pok_init();
-
-    while (1)
-    {
-        TS2RTC(unixtimestamp, &t_in);
-        t_in_h_year = (uint32_t)t_in.h_year;
-        t_in_l_year = (uint32_t)t_in.l_year;
-        t_in_mon = (uint32_t)t_in.mon;
-        t_in_day = (uint32_t)t_in.day;
-        t_in_hour = (uint32_t)t_in.hour;
-        t_in_min = (uint32_t)t_in.min;
-        t_in_sec = (uint32_t)t_in.sec;
-
-        printf("%02lu%02lu-%02lu-%02lu %02lu:%02lu:%02lu\n", t_in.h_year, t_in.l_year, t_in.mon, t_in.day, t_in.hour, t_in.min, t_in.sec);
-
-        stamp = timetostamp(t_out);
-        printf("Unix timestamp: %lu\n", stamp);
-    }
+    CRTCTS_init();
 }

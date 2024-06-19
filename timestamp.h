@@ -16,7 +16,7 @@ typedef struct
     uint32_t hour;
     uint32_t min;
     uint32_t sec;
-} TS_time_32;
+} RTC_time_32;
 
 typedef struct
 {
@@ -27,7 +27,7 @@ typedef struct
     uint16_t hour;
     uint16_t min;
     uint16_t sec;
-} TS_time_16;
+} RTC_time_16;
 
 typedef struct
 {
@@ -38,12 +38,28 @@ typedef struct
     uint8_t hour;
     uint8_t min;
     uint8_t sec;
-} TS_time_8;
+} RTC_time_8;
 
 extern uint8_t leapyear_check(uint16_t year_u16);
 
-extern uint32_t RTC2TS(const TS_time_32 *RTC_in);
+extern uint32_t RTC2TS(const RTC_time_8 *RTC_in);
 
-extern uint32_t TS2RTC(uint32_t TS_in, TS_time_32 *RTC_out);
+extern uint32_t TS2RTC(uint32_t TS_in, RTC_time_8 *RTC_out);
 
 extern void CRTCTS_init(void);
+
+extern RTC_time_16 *RTC8to16(const RTC_time_8 *RTC8);
+
+extern RTC_time_32 *RTC16to32(const RTC_time_16 *RTC16);
+
+extern RTC_time_32 *RTC8to32(const RTC_time_8 *RTC8);
+
+extern uint8_t RTC32to16(const RTC_time_32 *RTC32, RTC_time_16 *RTC16);
+
+extern uint8_t RTC16to8(const RTC_time_16 *RTC16, RTC_time_8 *RTC8);
+
+extern uint8_t RTC32to8(const RTC_time_32 *RTC32, RTC_time_8 *RTC8);
+
+extern uint8_t RTC_init(RTC_time_8 *RTC8);
+
+extern uint8_t RTC_print(const RTC_time_8 *RTC8);
